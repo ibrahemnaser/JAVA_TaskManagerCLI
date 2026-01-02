@@ -5,8 +5,8 @@ import java.util.Scanner;
 public class TaskManager {
     boolean isRunning = true;
     Scanner scanner = new Scanner(System.in);
-    int choice = -1;
     List<Task> tasks = new ArrayList<>();
+    int taskIdCounter = 1;
 
     TaskManager(){
         this.run();
@@ -20,8 +20,6 @@ public class TaskManager {
         System.out.println("[4]- Delete One Task");
         System.out.println("[5]- EXIT\n");
 
-        choice = scanner.nextInt();
-        scanner.nextLine();
     }
 
     public void exit(){
@@ -37,22 +35,32 @@ public class TaskManager {
         int taskPriority;
         System.out.println("*******************");
         System.out.println("ADD TASK START");
-        System.out.println("Description: ");
-        taskDescription = scanner.nextLine();
-        System.out.println("Priority [1- High / 2- Medium / 3- Low]");
-        taskPriority = scanner.nextInt();
+        try{
+            System.out.println("Description: ");
+            taskDescription = scanner.nextLine();
+            System.out.println("Priority [1- High / 2- Medium / 3- Low]");
+            taskPriority = scanner.nextInt();
+            tasks.add(new Task(this.taskIdCounter++,taskDescription,this.getPriority(taskPriority)));
+            System.out.println("SUCCESSFULLY ADDED TASK");
+        } catch (Exception e) {
+            System.out.println("I warn you!!");
+            System.out.println("FAILED ADDED TASK");
+        }
         scanner.nextLine();
 
-        tasks.add(new Task(tasks.size()+1,taskDescription,this.getPriority(taskPriority)));
-        System.out.println("SUCCESSFULLY ADDED TASK");
         System.out.println("*******************");
     }
 
     public void printAllTasks(){
         System.out.println("**************************");
         System.out.println("Print Start");
-        for (Task task : tasks){
-            task.print();
+
+        if(tasks.isEmpty()){
+            System.out.println("EMPTY LIST");
+        }else{
+            for (Task task : tasks){
+                task.print();
+            }
         }
         System.out.println("Print End");
         System.out.println("**************************");
@@ -79,14 +87,27 @@ public class TaskManager {
 
     public void deleteTask(){
         System.out.println("ID:");
+
         int id =scanner.nextInt();
                 scanner.nextLine();
-        tasks.removeIf(t -> t.ID == id);
-        System.out.println("SUCCESSFULLY DELETED");
+
+        boolean found = tasks.removeIf(t -> t.ID == id);
+        if(found)
+            System.out.println("SUCCESSFULLY DELETED");
+        else
+            System.out.println("Not Removed!!");
         System.out.println("*********************");
     }
 
     public void doAction(){
+        int choice = -1;
+        try{
+            choice = scanner.nextInt();
+        } catch (Exception e) {
+            System.out.println("Why not typing an integer?! ");
+        }
+        scanner.nextLine();
+
         switch (choice){
             case 1:
                 this.addTask();
@@ -100,7 +121,7 @@ public class TaskManager {
             case 4:
                 this.deleteTask();
                 break;
-            default:
+            case 5:
                 this.exit();
                 break;
         }
