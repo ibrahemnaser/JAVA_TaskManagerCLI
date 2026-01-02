@@ -76,6 +76,15 @@ public class TaskManager {
         }
     }
 
+    public void deleteTask(){
+        System.out.println("ID:");
+        int id =scanner.nextInt();
+                scanner.nextLine();
+        tasks.removeIf(t -> t.ID == id);
+        System.out.println("SUCCESSFULLY DELETED");
+        System.out.println("*********************");
+    }
+
     public void doAction(){
         switch (choice){
             case 1:
@@ -88,7 +97,7 @@ public class TaskManager {
                 this.printTask();
                 break;
             case 4:
-                System.out.println("ACTION FOUR");
+                this.deleteTask();
                 break;
             default:
                 this.exit();
