@@ -38,7 +38,7 @@ public class TaskManager {
         System.out.println("ADD TASK START");
         System.out.println("Description: ");
         taskDescription = scanner.nextLine();
-        System.out.println("Priority [1- High / 2- Medium / 3- Low");
+        System.out.println("Priority [1- High / 2- Medium / 3- Low]");
         taskPriority = scanner.nextInt();
         scanner.nextLine();
 
@@ -57,6 +57,25 @@ public class TaskManager {
         System.out.println("**************************");
     }
 
+    public void printTask(){
+        System.out.println("Enter id: ");
+        int taskId = scanner.nextInt();
+        scanner.nextLine();
+
+        boolean found = false;
+        for (Task task: tasks){
+            if(task.ID == taskId){
+                task.print();
+                found = true;
+                break;
+            }
+        }
+
+        if(!found){
+            System.out.println("No Task with ID: "+ taskId);
+        }
+    }
+
     public void doAction(){
         switch (choice){
             case 1:
@@ -66,7 +85,7 @@ public class TaskManager {
                 this.printAllTasks();
                 break;
             case 3:
-                System.out.println("ACTION THREE");
+                this.printTask();
                 break;
             case 4:
                 System.out.println("ACTION FOUR");
