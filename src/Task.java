@@ -1,9 +1,9 @@
 public class Task {
     int ID;
     String description;
-    String priority;
+    Priority priority;
 
-    Task(int ID, String description, String priority){
+    Task(int ID, String description, Priority priority){
         this.ID = ID;
         this.description = description;
         this.priority = priority;

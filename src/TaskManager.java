@@ -1,11 +1,12 @@
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class TaskManager {
     boolean isRunning = true;
     Scanner scanner = new Scanner(System.in);
     int choice = -1;
-    ArrayList<Task> tasks = new ArrayList<>();
+    List<Task> tasks = new ArrayList<>();
 
     TaskManager(){
         this.run();
@@ -27,8 +28,8 @@ public class TaskManager {
         this.isRunning = false;
     }
 
-    public String getPriority(int _choice){
-        return _choice == 1 ? "high" : _choice == 2 ? "medium" : "low";
+    public Priority getPriority(int _choice){
+        return _choice == 1 ? Priority.HIGH : _choice == 2 ? Priority.MEDIUM : Priority.LOW;
     }
 
     public void addTask(){
