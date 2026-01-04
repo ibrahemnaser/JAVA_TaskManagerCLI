@@ -9,6 +9,12 @@ public class Main {
         *                                '4- delete a task'] }
         * */
 
-        new TaskManager();
+//        new TaskManager();
+
+        /*
+        * Learn File Handling
+        * */
+
+        new MyFileHandler();
     }
 }
