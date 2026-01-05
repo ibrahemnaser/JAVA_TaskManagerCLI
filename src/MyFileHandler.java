@@ -1,11 +1,52 @@
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
+import java.nio.CharBuffer;
 
 public class MyFileHandler {
     MyFileHandler(){
-        this.readFileStream();
+//        this.readFileStream();
+//        this.writeFileStream();
+        this.readWrtieImage();
+    }
+
+    public void readWrtieImage(){
+        String srcPath= "./src/img1.png";
+        String outPath= "./src/img2.png";
+
+        try(FileInputStream fis = new FileInputStream(srcPath);
+            FileOutputStream fos = new FileOutputStream(outPath)){
+            byte [] b = new byte[(int) new File(srcPath).length()];
+
+            fis.read(b); // [1]- read image binary
+            // print the binary result
+//            for (byte chr: b){
+//                System.out.print((char)chr);
+//            }
+
+            // [2]- write it to new destination
+            fos.write(b);
+
+        }catch (Exception e){
+            System.out.println("E: "+e);
+
+        }
+    }
+
+    public void writeFileStream(){
+        String path= "./src/test.txt";
+
+        try(FileOutputStream fos = new FileOutputStream(path)){
+            System.out.println("Write to file <int | byte[]>");
+
+            fos.write(97); // byte integer >> 97:'a'
+
+            fos.write("\nHEllo\n".getBytes()); // array of bytes
+            fos.write("حسن الهلالي".getBytes("UTF-8")); // array of bytes >> "UTF-8" for arabic
+            fos.flush(); // >> ensure that all data is passed correctly to the file
+        }catch(FileNotFoundException fne){
+            System.out.println("File Not Found: "+fne);
+        }catch(IOException ioe){
+            System.out.println("I/O: " + ioe);
+        }
     }
 
     public void readFileStream(){
