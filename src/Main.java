@@ -16,5 +16,19 @@ public class Main {
          * */
 
         new MyFileHandler();
+        try{
+            checkNumber(-34);
+        }catch(NumberFormatException e){
+            System.out.println("Error");
+        } catch (NumberNotSuitableException e) {
+            System.out.println("HELLO");
+        }
+
+    }
+
+    static void checkNumber(int num) throws NumberNotSuitableException{
+        if(num <= 0){
+            throw new NumberNotSuitableException();
+        }
     }
 }
