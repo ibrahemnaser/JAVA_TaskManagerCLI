@@ -9,4 +9,8 @@ public class NumberNotSuitableException extends Exception {
     public NumberNotSuitableException(String message, Throwable cause){
         super(message,cause);
     }
+
+    public void run(){
+        System.out.println("RUNNING");
+    }
 }
