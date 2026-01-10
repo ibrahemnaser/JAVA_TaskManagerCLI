@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -13,20 +14,36 @@ public class TaskManager {
     Scanner scanner = new Scanner(System.in);
     List<Task> tasks = new ArrayList<>();
     int taskIdCounter = 1;
+    String path = "./src/data/my_tasks/tasks.txt";
+    Path filePath = Paths.get(path);
 
     public TaskManager() {
         this.loadTasks();
         this.run();
     }
 
+    private void appendToFile(String content,boolean append){
+        try(PrintWriter pwr = new PrintWriter(new FileWriter(filePath.toFile(),append))){
+            pwr.println(content);
+        }catch (IOException ioe){
+            System.out.println("Something went wrong!!");
+        }
+    }
+
+    /*
+    * remove [id] square brackets
+    * */
+    private int prepareID(String id){
+        return Integer.parseInt(id.substring(1,id.length()-1));
+    }
+
     public void loadTasks() {
         /*
          * Load Task From tasks.txt file
          * */
-        String path = "./src/data/my_tasks/tasks.txt";
+
 
         try {
-            Path filePath = Paths.get(path);
             Path parentDirecotryPath = filePath.getParent();
 
             if (parentDirecotryPath != null && !Files.exists(parentDirecotryPath)) {
@@ -37,28 +54,23 @@ public class TaskManager {
 
             if (!Files.exists(filePath)) {
                 // create file with header at first time
-                try (
-                        PrintWriter pwr = new PrintWriter(filePath.toFile());
-                ) {
-                    pwr.println("ID, Description, Priority");
-                    System.out.println("File created successfully: " + filePath.getFileName());
-                } catch (Exception e) {
-                    System.out.println("Something went wrong!!");
-                }
-
+                this.appendToFile("ID, Description, Priority",false);
+                System.out.println("File created successfully: " + filePath.getFileName());
             } else {
                 // load saved tasks
                 try (
                         Scanner scanner = new Scanner(filePath.toFile());
                 ) {
                     scanner.nextLine(); // skip first line header
+                    int lastId = taskIdCounter-1;
                     while (scanner.hasNextLine()) {
                         String line = scanner.nextLine();
-                        String[] taskSections = line.split(","); // [0] id - [1] description - [2] priority
-                        tasks.add(new Task(Integer.parseInt(taskSections[0]), taskSections[1], Priority.valueOf(taskSections[2].trim().toUpperCase())));
-                        this.taskIdCounter++;
+                        String[] taskSections = line.split(" - "); // [0] id - [1] description - [2] priority
+                        lastId = this.prepareID(taskSections[0]);
+                        tasks.add(new Task(lastId, taskSections[1], Priority.valueOf(taskSections[2].trim().toUpperCase())));
                         System.out.println("Line loaded successfully: " + line);
                     }
+                    this.taskIdCounter = lastId+1;
                 } catch (Exception e) {
                     System.out.println("Something went wrong [Loading Tasks]!!");
                 }
@@ -98,7 +110,9 @@ public class TaskManager {
             taskDescription = scanner.nextLine();
             System.out.println("Priority [1- High / 2- Medium / 3- Low]");
             taskPriority = scanner.nextInt();
-            tasks.add(new Task(this.taskIdCounter++, taskDescription, this.getPriority(taskPriority)));
+            Task tsk = new Task(this.taskIdCounter++, taskDescription, this.getPriority(taskPriority));
+            tasks.add(tsk);
+            this.appendToFile(tsk.toString(),true);
             System.out.println("SUCCESSFULLY ADDED TASK");
         } catch (Exception e) {
             System.out.println("I warn you!!");
@@ -150,10 +164,17 @@ public class TaskManager {
         scanner.nextLine();
 
         boolean found = tasks.removeIf(t -> t.ID == id);
+
+        this.appendToFile("ID, Description, Priority",false);
+        for (Task tsk: tasks){
+            this.appendToFile(tsk.toString(),true);
+        }
+
         if (found)
             System.out.println("SUCCESSFULLY DELETED");
         else
             System.out.println("Not Removed!!");
+
         System.out.println("*********************");
     }
 

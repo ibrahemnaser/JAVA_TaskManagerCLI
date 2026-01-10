@@ -12,4 +12,9 @@ public class Task {
     public void print(){
         System.out.printf("[%d] - %s - %S\n",this.ID, this.description, this.priority);
     }
+
+    @Override
+    public String toString(){
+        return "["+this.ID+"] - "+this.description+" - "+this.priority;
+    }
 }
