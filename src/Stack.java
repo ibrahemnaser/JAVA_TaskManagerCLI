@@ -1,3 +1,5 @@
+import java.util.EmptyStackException;
+
 public class Stack<T> {
     private int top;
     private final int capacity;
@@ -29,7 +31,7 @@ public class Stack<T> {
     public T pop(){
         if(isEmpty()){
             System.out.println("Empty");
-            return null;
+            throw new EmptyStackException();
         }
         return this.stackArr[top--];
     }
